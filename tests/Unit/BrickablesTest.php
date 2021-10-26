@@ -66,7 +66,7 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([
             [get_class($brickableOne), ['custom' => 'first-brickable-one']],
             [get_class($brickableTwo), ['custom' => 'first-brickable-two']],
@@ -127,7 +127,7 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([
             [get_class($brickableOne), ['custom' => 'first-brickable-one']],
             [get_class($brickableTwo), ['custom' => 'first-brickable-two']],
@@ -163,7 +163,7 @@ class BrickablesTest extends BrickableTestCase
         };
         config()->set('brickables.registered', [get_class($brickable)]);
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         self::assertEquals(
             view('laravel-brickables::admin.panel.layout', ['model' => $page])->render(),
@@ -202,7 +202,7 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([[get_class($brickableOne)], [get_class($brickableTwo)]]);
         $bricks = Brick::all();
         self::assertEquals(
@@ -250,7 +250,7 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBrick(get_class($brickableOne));
         $page->addBrick(get_class($brickableTwo));
         $page->addBrick(get_class($brickableOne));
@@ -279,7 +279,7 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([[get_class($brickable), []]]);
         $brick = Brick::first();
         self::assertEquals(
@@ -310,8 +310,8 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
-        $company = factory(Company::class)->create();
+        $page = Page::factory()->create();
+        $company = Company::factory()->create();
         $brick = $page->addBrick(get_class($brickable));
         $brick->companies()->sync([$company->id]);
         $rawBrick = $brick = Brick::first();
@@ -325,7 +325,7 @@ class BrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_get_model_from_create_request(): void
     {
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $request = (new Request())->merge(['model_type' => $page->getMorphClass(), 'model_id' => $page->id]);
         $model = Brickables::getModelFromRequest($request);
         self::assertTrue($page->is($model));
@@ -346,7 +346,7 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         $request = (new Request())->merge(['brick' => $brick]);
         $model = Brickables::getModelFromRequest($request);

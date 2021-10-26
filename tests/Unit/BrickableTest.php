@@ -147,7 +147,7 @@ class BrickableTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         self::assertEquals('http://localhost/dummy/edit/' . $brick->id, $brickable->getEditRoute($brick));
     }
@@ -174,7 +174,7 @@ class BrickableTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         self::assertEquals('http://localhost/dummy/update/' . $brick->id, $brickable->getUpdateRoute($brick));
     }
@@ -201,7 +201,7 @@ class BrickableTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         self::assertEquals('http://localhost/dummy/destroy/' . $brick->id, $brickable->getDestroyRoute($brick));
     }
@@ -229,7 +229,7 @@ class BrickableTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         self::assertEquals('http://localhost/dummy/move/up/' . $brick->id, $brickable->getMoveUpRoute($brick));
     }
@@ -257,7 +257,7 @@ class BrickableTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         self::assertEquals('http://localhost/dummy/move/down/' . $brick->id, $brickable->getMoveDownRoute($brick));
     }

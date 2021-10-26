@@ -2,19 +2,18 @@
 
 namespace Okipa\LaravelBrickables\Controllers;
 
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Okipa\LaravelBrickables\Models\Brick;
 
 class DispatchController extends Controller
 {
-    /**
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    public function create(Request $request)
+    public function create(Request $request): View|RedirectResponse|Response|JsonResponse
     {
         $validator = Validator::make($request->only('brickable_type'), ['brickable_type' => ['required', 'string']]);
         if ($validator->fails()) {
@@ -24,82 +23,43 @@ class DispatchController extends Controller
         return $this->dispatchRequest('create', $request);
     }
 
-    /**
-     * @param string $action
-     * @param \Illuminate\Http\Request $request
-     * @param \Okipa\LaravelBrickables\Models\Brick|null $brick
-     *
-     * @return mixed
-     */
-    protected function dispatchRequest(string $action, Request $request, ?Brick $brick = null)
-    {
+    protected function dispatchRequest(
+        string $action,
+        Request $request,
+        Brick|null $brick = null
+    ): View|RedirectResponse|Response|JsonResponse {
         $brickable = $brick->brickable ?? app($request->brickable_type);
         $bricksController = $brickable->getBricksController();
 
         return $bricksController->callAction($action, $brick ? compact('brick', 'request') : compact('request'));
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse|Response|JsonResponse
     {
         return $this->dispatchRequest('store', $request);
     }
 
-    /**
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function edit(Brick $brick, Request $request)
+    public function edit(Brick $brick, Request $request): View|RedirectResponse|Response|JsonResponse
     {
         return $this->dispatchRequest('edit', $request, $brick);
     }
 
-    /**
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    public function update(Brick $brick, Request $request)
+    public function update(Brick $brick, Request $request): RedirectResponse|Response|JsonResponse
     {
         return $this->dispatchRequest('update', $request, $brick);
     }
 
-    /**
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    public function destroy(Brick $brick, Request $request)
+    public function destroy(Brick $brick, Request $request): RedirectResponse|Response|JsonResponse
     {
         return $this->dispatchRequest('destroy', $request, $brick);
     }
 
-    /**
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    public function moveUp(Brick $brick, Request $request)
+    public function moveUp(Brick $brick, Request $request): RedirectResponse|Response|JsonResponse
     {
         return $this->dispatchRequest('moveUp', $request, $brick);
     }
 
-    /**
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    public function moveDown(Brick $brick, Request $request)
+    public function moveDown(Brick $brick, Request $request): RedirectResponse|Response|JsonResponse
     {
         return $this->dispatchRequest('moveDown', $request, $brick);
     }

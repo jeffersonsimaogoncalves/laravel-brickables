@@ -29,13 +29,13 @@ interface HasBrickables
 
     public function canHandle(string $brickableClass): bool;
 
-    public function getBricks(?array $brickableClasses = []): Collection;
+    public function getBricks(array $brickableClasses = []): Collection;
 
     public function clearBricksExcept(Collection $excludeBricks): void;
 
-    public function clearBricks(?array $brickableClasses = []): void;
+    public function clearBricks(array $brickableClasses = []): void;
 
-    public function getFirstBrick(?string $brickableClass = null): ?Brick;
+    public function getFirstBrick(string|null $brickableClass = null): ?Brick;
 
     public function getReadableClassName(): string;
 

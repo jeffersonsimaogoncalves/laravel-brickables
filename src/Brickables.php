@@ -45,10 +45,7 @@ class Brickables
 
     public function routes(Closure $additionalRoutes = null): void
     {
-        Route::middleware([
-            CRUDBrickable::class,
-            SubstituteBindings::class,
-        ])->group(function () use ($additionalRoutes) {
+        Route::middleware(['web'])->group(function () use ($additionalRoutes) {
             Route::get('brick/create', [DispatchController::class, 'create'])->name('brick.create');
             Route::post('brick/store', [DispatchController::class, 'store'])->name('brick.store');
             Route::get('brick/edit/{brick}', [DispatchController::class, 'edit'])->name('brick.edit');

@@ -3,8 +3,11 @@
 namespace Okipa\LaravelBrickables\Controllers;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
@@ -24,14 +27,11 @@ class BricksController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
      * @throws \Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse|Response|JsonResource
     {
         /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
         $model = app($request->model_type)->findOrFail($request->model_id);
@@ -46,11 +46,6 @@ class BricksController extends Controller
 
     /**
      * Execute additional treatment once the brick has been stored.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     *
-     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function stored(Request $request, Brick $brick): void
@@ -79,13 +74,7 @@ class BricksController extends Controller
         return view($brickable->getFormViewPath(), compact('brick', 'model', 'brickable', 'adminPanelUrl'));
     }
 
-    /**
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    public function update(Brick $brick, Request $request)
+    public function update(Brick $brick, Request $request): RedirectResponse|Response|JsonResponse
     {
         $brick = Brickables::castBrick($brick);
         $validated = $brick->brickable->validateUpdateInputs();
@@ -98,11 +87,6 @@ class BricksController extends Controller
 
     /**
      * Execute additional treatment once the brick has been updated.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     *
-     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function updated(Request $request, Brick $brick): void
@@ -110,14 +94,8 @@ class BricksController extends Controller
         //
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function sendBrickUpdatedResponse(Request $request, Brick $brick)
+    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
+    protected function sendBrickUpdatedResponse(Request $request, Brick $brick): RedirectResponse|Response|JsonResponse
     {
         return redirect()->back()->with('success', __('The entry :model > :brickable has been updated.', [
             'brickable' => $brick->brickable->getLabel(),
@@ -125,13 +103,7 @@ class BricksController extends Controller
         ]));
     }
 
-    /**
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    public function destroy(Brick $brick, Request $request)
+    public function destroy(Brick $brick, Request $request): RedirectResponse|Response|JsonResponse
     {
         $brick = Brickables::castBrick($brick);
         $brickClone = clone $brick;
@@ -140,14 +112,10 @@ class BricksController extends Controller
         return $this->sendBrickDestroyedResponse($request, $brickClone);
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    protected function sendBrickDestroyedResponse(Request $request, Brick $brick)
-    {
+    protected function sendBrickDestroyedResponse(
+        Request $request,
+        Brick $brick
+    ): RedirectResponse|Response|JsonResponse {
         return redirect()->to($request->admin_panel_url)
             ->with('success', __('The entry :model > :brickable has been deleted.', [
                 'brickable' => $brick->brickable->getLabel(),
@@ -155,13 +123,7 @@ class BricksController extends Controller
             ]));
     }
 
-    /**
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    public function moveUp(Brick $brick, Request $request)
+    public function moveUp(Brick $brick, Request $request): RedirectResponse|Response|JsonResponse
     {
         $brick = Brickables::castBrick($brick);
         $brick->moveOrderUp();
@@ -169,25 +131,13 @@ class BricksController extends Controller
         return $this->sendBrickMovedResponse($request, $brick->fresh());
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function sendBrickMovedResponse(Request $request, Brick $brick)
+    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
+    protected function sendBrickMovedResponse(Request $request, Brick $brick): RedirectResponse|Response|JsonResponse
     {
         return redirect()->to($request->admin_panel_url);
     }
 
-    /**
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    public function moveDown(Brick $brick, Request $request)
+    public function moveDown(Brick $brick, Request $request): RedirectResponse|Response|JsonResponse
     {
         $brick = Brickables::castBrick($brick);
         $brick->moveOrderDown();

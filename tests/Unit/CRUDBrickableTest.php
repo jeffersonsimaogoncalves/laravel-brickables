@@ -125,7 +125,7 @@ class CRUDBrickableTest extends BrickableTestCase
         Route::get('/{brick}', function () {
             //
         })->middleware(SubstituteBindings::class, CRUDBrickable::class);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $response = $this->call('GET', '/' . $brick->id)->assertForbidden();
         self::assertEquals(
@@ -140,7 +140,7 @@ class CRUDBrickableTest extends BrickableTestCase
         Route::get('/{brick}', function () {
             //
         })->middleware(SubstituteBindings::class, CRUDBrickable::class);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('GET', '/' . $brick->id, ['admin_panel_url' => 'url'])->assertOk();
     }

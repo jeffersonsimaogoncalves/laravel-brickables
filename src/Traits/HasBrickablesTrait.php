@@ -111,7 +111,7 @@ trait HasBrickablesTrait
         return (int) $maxNumberOfBricks;
     }
 
-    public function getBricks(?array $brickableClasses = []): Collection
+    public function getBricks(array|null $brickableClasses = []): Collection
     {
         /** @var \Okipa\LaravelBrickables\Models\Brick $bricksBaseModel */
         $bricksBaseModel = app(config('brickables.bricks.model'));
@@ -146,12 +146,12 @@ trait HasBrickablesTrait
             ->each(fn(Brick $brick) => $brick->delete());
     }
 
-    public function clearBricks(?array $brickableClasses = []): void
+    public function clearBricks(array|null $brickableClasses = []): void
     {
         $this->getBricks($brickableClasses)->each->delete();
     }
 
-    public function getFirstBrick(?string $brickableClass = null): ?Brick
+    public function getFirstBrick(string|null $brickableClass = null): ?Brick
     {
         return $this->getBricks(array_filter([$brickableClass]))->first();
     }

@@ -35,7 +35,7 @@ class BrickTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         self::assertEquals(view($brick->brickable->getBrickViewPath(), compact('brick')), $brick->toHtml());
     }

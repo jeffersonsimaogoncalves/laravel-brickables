@@ -33,9 +33,15 @@ abstract class BrickableTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->withFactories(__DIR__ . '/database/factories');
         include_once __DIR__ . '/../database/migrations/create_bricks_table.php.stub';
         (new \CreateBricksTable())->up();
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+    }
+
+    protected function executeWebMiddlewareGroup(): void
+    {
+        // Hack in order to provide the $error variable in views.
+        $this->app['router']->get('test', ['middleware' => 'web']);
+        $this->call('GET', 'test');
     }
 }

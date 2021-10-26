@@ -484,12 +484,12 @@ class MyNewBrickable extends Brickable
 {
     // ...
 
-    protected function setCssResourcePath(): ?string
+    protected function setCssResourcePath(): string|null
     {
         return mix('/css/brickables/my-new-brickable.css');
     }
 
-    protected function setJsResourcePath(): ?string
+    protected function setJsResourcePath(): string|null
     {
         return mix('/js/brickables/my-new-brickable.js');
     }

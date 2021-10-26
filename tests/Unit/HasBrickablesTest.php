@@ -30,7 +30,7 @@ class HasBrickablesTest extends BrickableTestCase
         $brickable = new class {
             //
         };
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $this->expectException(InvalidBrickableClassException::class);
         $page->addBrick(get_class($brickable), []);
     }
@@ -49,7 +49,7 @@ class HasBrickablesTest extends BrickableTestCase
                 return [];
             }
         };
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $this->expectException(NotRegisteredBrickableClassException::class);
         $page->addBrick(get_class($brickable), []);
     }
@@ -101,7 +101,7 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         self::assertTrue($brick->is(Brick::first()));
     }
@@ -128,7 +128,7 @@ class HasBrickablesTest extends BrickableTestCase
         };
         config()->set('brickables.bricks.model', get_class($brickModel));
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         self::assertTrue($brick->is($brickModel->first()));
         self::assertEquals('dummy', $brick->dummy());
@@ -197,7 +197,7 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $bricks = $page->addBricks([[get_class($brickable), []], [get_class($brickable), []]]);
         self::assertCount(2, $bricks);
         self::assertEmpty(Brick::all()->diff($bricks));
@@ -218,7 +218,7 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([[get_class($brickable), []], [get_class($brickable), []]]);
         self::assertCount(2, Brick::all());
         self::assertEmpty(Brick::all()->diff($page->getBricks()));
@@ -250,7 +250,7 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable), get_class($otherBrickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([[get_class($brickable)], [get_class($otherBrickable)]]);
         self::assertCount(1, $page->getBricks([get_class($brickable)]));
         self::assertEmpty(Brick::where('brickable_type', get_class($brickable))->get()
@@ -283,7 +283,7 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable), get_class($otherBrickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([[get_class($brickable)], [get_class($otherBrickable)]]);
         self::assertCount(1, $page->getBricks([get_class($brickable)]));
         self::assertEmpty(Brick::where('brickable_type', get_class($brickable))
@@ -317,7 +317,7 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable), get_class($otherBrickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([
             [get_class($brickable), ['text' => 'Text #1']],
             [get_class($otherBrickable), ['text' => 'Text #2']],
@@ -353,7 +353,7 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable), get_class($otherBrickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([
             [get_class($brickable), ['text' => 'Text #1']],
             [get_class($otherBrickable), ['text' => 'Text #2']],
@@ -398,7 +398,7 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable), get_class($otherBrickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([
             [get_class($brickable), ['text' => 'Text #1']],
             [get_class($brickable), ['text' => 'Text #2']],
@@ -436,7 +436,7 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable), get_class($otherBrickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([
             [get_class($brickable), ['text' => 'Text #1']],
             [get_class($brickable), ['text' => 'Text #2']],
@@ -475,7 +475,7 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable), get_class($otherBrickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([
             [get_class($brickable), ['text' => 'Text #1']],
             [get_class($brickable), ['text' => 'Text #2']],
@@ -554,7 +554,7 @@ class HasBrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_return_brickables_that_can_be_added_to_model(): void
     {
-        $instance = factory(Page::class)->create();
+        $instance = Page::factory()->create();
         config()->set('brickables.registered', [OneTextColumn::class, TwoTextColumns::class]);
         $additionableBbrickables = $instance->getAdditionableBrickables();
         self::assertCount(2, $additionableBbrickables);
@@ -622,7 +622,7 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         self::assertEquals(
             view('laravel-brickables::bricks', [
@@ -662,7 +662,7 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         self::assertEquals(
             view('laravel-brickables::admin.panel.layout', ['model' => $page])->toHtml(),
